@@ -256,14 +256,55 @@
 # Примечание 1. Гарантируется, что у всех сотрудников имена и фамилии различны.
 #
 # Примечание 2. Тестовые данные доступны по ссылкам:
-from datetime import datetime
-pattern = '%d.%m.%Y'
-n = int(input())
-employees = {}
-for i in range(n):
-    name, surname, birthday = input().split()
-    birthday = datetime.strptime(birthday, pattern)
-    employees[name+' '+surname] = birthday
+# from datetime import datetime
+# pattern = '%d.%m.%Y'
+# n = int(input())
+# employees = []
+# for i in range(n):
+#     name, surname, birthday = input().split()
+#     birthday = datetime.strptime(birthday, pattern)
+#     employees.append((name + ' ' + surname, birthday))
+#
+# employees= sorted(employees, key = lambda x:x[1])
+# morethanone =[employees[0]]
+# for i in range(1,len(employees)):
+#     if employees[i][1] == employees[0][1]:\
+#         morethanone.append(employees[i])
+# if len(morethanone) > 1:
+#     print(morethanone[0][1].strftime(pattern), len(morethanone))
+# else:
+#     print(morethanone[0][1].strftime(pattern),morethanone[0][0])
+#
+# ####examples
+# from datetime import datetime, timedelta
+#
+# data = {}
+# youngest = datetime.max
+# pattern = '%d.%m.%Y'
+#
+# for _ in range(int(input())):
+#     *name, birthday = input().split()
+#     name, birthday = ' '.join(name), datetime.strptime(birthday, pattern)
+#     if birthday < youngest:
+#         youngest = birthday
+#     data[name] = birthday
+#
+# oldest = [name for name, bd in data.items() if bd == youngest]
+#
+# if len(oldest) > 1:
+#     print(youngest.strftime(pattern), len(oldest))
+# else:
+#     print(youngest.strftime(pattern), oldest[0])
 
-for i,j in sorted(employees.values(), reverse=True):
-    print(i.strftime(pattern),j)
+# from datetime import datetime
+#
+# data = [tuple(input().rsplit(' ', 1)) for _ in range(int(input()))]
+#
+# oldest = min(data, key=lambda x: datetime.strptime(x[1], '%d.%m.%Y'))
+#
+# result = list(filter(lambda x: x[1] == oldest[1], data))
+#
+# if len(result) > 1:
+#     print(oldest[1], len(result))
+# else:
+#     print(*oldest[::-1])
