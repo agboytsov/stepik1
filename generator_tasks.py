@@ -158,4 +158,21 @@ def card_deck(suit):
             suits_count = 0
 
 
+### examples
 
+def card_deck(suit: str):
+    suits = ['пик', 'треф', 'бубен', 'червей']
+    face_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'валет', 'дама', 'король', 'туз']
+    suits.remove(suit)
+    while True:
+        for suit_ in suits:
+            for face_value in face_values:
+                yield f'{face_value} {suit_}'
+
+
+def card_deck(suit):
+    return (f'{j} {i}'
+            for _ in iter(lambda: 1, 0)
+            for i in 'пик треф бубен червей'.split()
+            for j in '2 3 4 5 6 7 8 9 10 валет дама король туз'.split()
+            if i != suit)
