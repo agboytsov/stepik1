@@ -249,7 +249,213 @@ def interleave(*args):
     res = zip(*args)
     return (i for r in res for i in r)
 
+#10.7.5
+# Вам доступен именованный кортеж Person, который содержит данные о человеке. Первым элементом именованного кортежа является имя и фамилия человека, вторым — национальность, третьим — пол, четвертым — год рождения, пятым — год смерти. Если человек жив, год смерти считается равным 
+# 0
+# 0. Также доступен список persons, содержащий эти кортежи.
+
+# Дополните приведенный ниже код с использованием конвейеров генераторов, чтобы он вывел имя и фамилию самого молодого живого мужчины (male) из Швеции (Swedish).
+
+# Примечание 1. Пример вывода:
+
+# Goran Aslin
+# Примечание 2. Гарантируется, что искомый человек единственный.
+
+from collections import namedtuple
+
+Person = namedtuple('Person', ['name', 'nationality', 'sex', 'birth', 'death'])
+
+persons = [Person('E. M. Ashe', 'American', 'male', 1867, 1941),
+           Person('Goran Aslin', 'Swedish', 'male', 1980, 0),
+           Person('Erik Gunnar Asplund', 'Swedish', 'male', 1885, 1940),
+           Person('Genevieve Asse', 'French', 'female', 1949, 0),
+           Person('Irene Adler', 'Swedish', 'female', 2005, 0),
+           Person('Sergio Asti', 'Italian', 'male', 1926, 0),
+           Person('Olof Backman', 'Swedish', 'male', 1999, 0),
+           Person('Alyson Hannigan', 'Swedish', 'female', 1940, 1987),
+           Person('Dana Atchley', 'American', 'female', 1941, 2000),
+           Person('Monika Andersson', 'Swedish', 'female', 1957, 0),
+           Person('Shura_Stone', 'Russian', 'male', 2000, 0),
+           Person('Jon Bale', 'Swedish', 'male', 2000, 0)]
+
+alive = (i for i in persons if i.death == 0)
+male = (i for i in alive if i.sex == 'male')
+swedish = (i for i in male if i.nationality == 'Swedish')
+
+#print(max(swedish, key=lambda x: x.birth).name)
+
+
+# 10.6.6.
+
+# Назовем диапазоном запись двух натуральных чисел через дефис a-b, где a — левая граница диапазона, b — правая граница диапазона, причем a <= b. Диапазон содержит в себе все числа от a до b включительно. Например, диапазон 1-4 содержит числа 
+
+# 1, 2, 3 и 4.
+
+# Реализуйте генераторную функцию parse_ranges(), которая принимает один аргумент:
+
+# ranges — строка, в которой через запятую указаны диапазоны чисел
+# Функция должна возвращать генератор, порождающий последовательность чисел, содержащихся в диапазонах ranges.
+
+def parse_ranges(string):
+    pairs = (i for i in string.split(','))
+    for i in pairs:
+        a, b = (int(x) for x in i.split('-'))
+        yield from range(a, b+1)
+
+
+# 10.6.7
+# Реализуйте генераторную функцию filter_names(), которая принимает три аргумента в следующем порядке:
+
+# names — список имен
+# ignore_char — одиночный символ
+# max_names — натуральное число
+# Функция должна возвращать генератор, порождающий max_names имён из списка names, игнорируя имена, которые
+
+# начинаются на ignore_char (в любом регистре)
+# содержат хотя бы одну цифру
+# Если max_names больше количества имен в списке names, то генератор должен породить все возможные имена из данного списка. 
+
+# Примечание 1. Имена в возвращаемом функцией генераторе должны располагаться в своем исходном порядке.        
+
+
+def filter_names(names: list, char: str, max_names: int):
+    counter = 0
+    for i in names:
+        if not i.startswith(char.upper()) and i.isalpha():
+            yield i
+            counter += 1
+        if counter == max_names:
+            break
+
+### examples
+def filter_names(names, ignore_char, max_names):
+    ignore_char = ignore_char.lower()
+    filtred_char = (name for name in names if not name.lower().startswith(ignore_char))
+    filtred_dig = (name for name in filtred_char if name.isalpha())
+    return (name for idx, name in enumerate(filtred_dig) if idx < max_names)
+
+
+def filter_names(names, ignore_char, max_names):
+    f1 = (i for i in names if not i.lower().startswith(ignore_char.lower()) )
+    f2 = (i for i in f1 if not any(map(str.isdigit, i)))
+    f3 = (i for i in range(max_names))
+    return (i[1] for i in zip(f3, f2))
+
+#10.6.8
+# 
+# Вам доступен файл data.csv, который содержит информацию об инвестициях в различные стартапы. В первом столбце записано название компании (стартапа), во втором — инвестируемая сумма в долларах, в третьем — раунд инвестиции:
+
+# company,raisedAmt,round
+# LifeLock,6850000,b
+# LifeLock,6000000,a
+# LifeLock,25000000,c
+# MyCityFaces,50000,seed
+# Flypaper,3000000,a
+# ...
+# Напишите программу с использованием конвейеров генераторов, определяющую общую сумму, которая была инвестирована в раунде а, и выводящую полученный результат.
+
+# Примечание 1. Разделителем в файле data.csv является запятая, при этом кавычки не используются.    
+
+
+# filename = 'data/data.csv'
+# with open(filename, 'r', encoding='UTF-8') as file:
+#     file_lines = (line for line in file)
+#     line_values = (line.rstrip().split(',') for line in file_lines)
+#     file_headers = next(line_values)
+#     line_dicts = (dict(zip(file_headers, data)) for data in line_values)
+#     round_a = (int(line['raisedAmt']) for line in line_dicts if 'a' == line['round'])
+#     print(sum(round_a))
+
+
+#10.6.9
+
+# Реализуйте генераторную функцию years_days(), которая принимает один аргумент:
+
+# year — натуральное число
+# Функция должна возвращать генератор, порождающий последовательность всех дат (тип date) в году year.
+
+# Примечание 1. Возьмем в качестве примера 
+# 2022
+# 2022 год. В январе этого года 
+# 31
+# 31 день, в феврале — 
+# 28
+# 28, в марте — 
+# 31
+# 31, и так далее. Тогда генератор, полученный при вызове years_days(2022), должен порождать сначала все даты с 
+# 1
+# 1 по 
+# 31
+# 31 января, затем с 
+# 1
+# 1 по 
+# 28
+# 28 февраля, и так далее до 
+# 31
+# 31 декабря.
+
+from datetime import date, timedelta
+def years_days(year):
+    start = date(year,1,1)
+    max_days = date(year+1,1,1) - start
+    return (start + timedelta(days=x) for x in range(0, max_days.days))
+
+#10.6.10
+
+# Реализуйте генераторную функцию nonempty_lines(), которая принимает один аргумент:
+
+# file — название текстового файла, например, data.txt
+# Функция должна возвращать генератор, порождающий последовательность всех непустых строк файла file с убранным символом переноса строки \n. Если строка содержит более 
+
+# 25 символов, она заменяется многоточием ....
+
+
+def nonempty_lines(file):
+    with open(file, 'r', encoding='UTF-8') as f:
+        lines = (line.strip() for line in f if not line.isspace())
+        for line in lines:
+            if len(line) <= 25:
+                yield line
+            else:
+                yield "..."   
+
+#10.6.11
+
+# Вам доступен файл planets.txt, содержащий информацию о различных планетах. В первых четырех строках указаны характеристики первой планеты, после чего следует пустая строка, затем характеристики второй планеты, и так далее:
+
+# Name = Mercury
+# Diameter = 4879.4
+# Mass = 3.302×10^23
+# OrbitalPeriod = 0.241
+
+# Name = Venus
+# Diameter = 12103.6
+# Mass = 4.869×10^24
+# OrbitalPeriod = 0.615
+
+# ...
+# Реализуйте генераторную функцию txt_to_dict(), которая не принимает никаких аргументов.
+
+# Функция должна возвращать генератор, порождающий последовательность словарей, каждый из которых содержит информацию об очередной планете из файла planets.txt, а именно ее название, диаметр, массу и орбитальный период. Например:
+
+# {'Name': 'Mercury', 'Diameter': '4879.4', 'Mass': '3.302×10^23', 'OrbitalPeriod': '0.241'}
+# Примечание 1. Указанный файл доступен по ссылке.
+
+# Примечание 2. При открытии файла используйте явное указание кодировки UTF-8.
 
 
 
-
+def txt_to_dict():
+    filename = 'data/planets.txt'
+    with open(filename,'r',encoding='UTF-8') as file:
+        lines = (line.strip() for line in file)
+        dct = {}
+        for line in lines:
+            if not line:
+                yield dct
+                dct = {}
+            else:
+                key, value = line.split(' = ')
+                dct[key] = value
+        if dct:
+            yield dct         
