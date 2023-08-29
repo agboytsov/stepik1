@@ -458,4 +458,172 @@ def txt_to_dict():
                 key, value = line.split(' = ')
                 dct[key] = value
         if dct:
-            yield dct         
+            yield dct
+
+
+
+### examples
+def planet_features(file):
+    features = {}
+    for _ in range(4):
+        key, value = file.readline().strip().split(' = ')
+        features[key] = value
+    return features
+
+def txt_to_dict():
+    with open('planets.txt') as file:
+        line = 'lets some yield'
+        while line:
+            yield planet_features(file)
+            line = file.readline()
+
+###
+def txt_to_dict():
+    with open('planets.txt', 'r', encoding='utf-8') as file:
+        items = (i.split('\n') for i in file.read().split('\n\n'))
+        return (dict(i.split(' = ') for i in planet) for planet in items)
+
+
+
+# 10.7.19
+#
+# Реализуйте генераторную функцию, которая принимает один аргумент:
+#
+# iterable — итерируемый объект
+# Функция должна возвращать генератор, порождающий последовательность элементов итерируемого объекта iterable без дубликатов.
+#
+# Примечание 1. Элементы итерируемого объекта в возвращаемом функцией генераторе должны располагаться в своем исходном порядке.
+#
+# Примечание 2. Гарантируется, что итерируемый объект, передаваемый в функцию, не является множеством.
+
+def unique(it):
+    res = []
+    for i in it:
+        if i not in res:
+            res.append(i)
+            yield i
+        else:
+            continue
+
+
+### examples
+def unique(iterable):
+    res = ({i:1 for i in iterable})
+    yield from res
+
+
+def unique(numbers):
+    yield from (dict.fromkeys(numbers))
+
+
+def unique(iterable):
+    yield from {i: 0 for i in iterable}
+
+
+# 10.7.20
+# Функция stop_on()
+# Реализуйте генераторную функцию, которая принимает два аргумента в следующем порядке:
+#
+# iterable — итерируемый объект
+# obj — произвольный объект
+# Функция должна возвращать генератор, порождающий последовательность элементов итерируемого объекта iterable до тех пор, пока не будет достигнут элемент, равный obj. Если итерируемый объект iterable не содержит ни одного элемента, равного obj, генератор должен породить все элементы iterable.
+#
+# Примечание 1. Элементы итерируемого объекта в возвращаемом функцией генераторе должны располагаться в своем исходном порядке.
+#
+# Примечание 2. Гарантируется, что итерируемый объект, передаваемый в функцию, не является множеством.
+
+def stop_on(it,obj):
+    for i in it:
+        if i != obj:
+            yield i
+        else:
+            break
+
+
+# 10.7.21
+# Функция with_previous()
+# Реализуйте генераторную функцию, которая принимает один аргумент:
+#
+# iterable — итерируемый объект
+# Функция должна возвращать генератор, порождающий последовательность кортежей, каждый из которых содержит очередной элемент итерируемого объекта iterable, а также предшествующий ему элемент:
+#
+# (<очередной элемент>, <предыдущий элемент>)
+# Для первого элемента предыдущим считается значение None.
+#
+# Примечание 1. Элементы итерируемого объекта в возвращаемом функцией генераторе должны располагаться в своем исходном порядке.
+#
+# Примечание 2. Гарантируется, что итерируемый объект, передаваемый в функцию, не является множеством.
+
+def with_previous(it):
+    if not it:
+        return
+    it = iter(it)
+    prev = next(it)
+    yield (prev, None)
+    for i in it:
+        yield (i, prev)
+        prev = i
+
+
+### examples
+def with_previous(iterable):
+    prev = None
+    return ((i, prev, prev := i)[:-1] for i in iterable)
+
+
+def with_previous(iterable):
+    prev_elem = None
+    for elem in iterable:
+        yield elem, prev_elem
+        prev_elem = elem
+
+# 10.7.22
+# Функция pairwise()
+# Реализуйте генераторную функцию, которая принимает один аргумент:
+#
+# iterable — итерируемый объект
+# Функция должна возвращать генератор, порождающий последовательность кортежей, каждый из которых содержит очередной элемент итерируемого объекта iterable, а также следующий за ним элемент:
+#
+# (<очередной элемент>, <следующий элемент>)
+# Для последнего элемента следующим считается значение None.
+#
+# Примечание 1. Элементы итерируемого объекта в возвращаемом функцией генераторе должны располагаться в своем исходном порядке.
+#
+# Примечание 2. Гарантируется, что итерируемый объект, передаваемый в функцию, не является множеством.
+
+
+def pairwise(it):
+    if not it:
+        return
+
+    it = iter(it)
+    first, second = next(it), next(it,None)
+    yield (first, second)
+    for i in it:
+        yield (second, i)
+        second = i
+    yield (second, None)
+
+
+### examples
+
+def pairwise(iterable):
+    it = iter(iterable)
+    i = next(it, None)
+    while i != None:
+        i, prev = next(it, None), i
+        yield prev, i
+
+def pairwise(iterable):
+    it = iter(iterable)
+    try:
+        a = next(it)
+        for i in it:
+            yield (a, i)
+            a = i
+        yield (a, None)
+    except StopIteration:
+        pass
+
+
+

@@ -18,7 +18,7 @@ def csv_columns(filename):
 
 # import csv
 # #считываем пользователей
-# with open('data.csv', 'r', encoding='UTF-8') as file:
+# with open('data_0.csv', 'r', encoding='UTF-8') as file:
 #     rows = list(csv.DictReader(file, delimiter=',', quotechar='"'))
 # res = {}
 # for row in rows:
