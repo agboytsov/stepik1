@@ -917,6 +917,33 @@ if bag_items:
 else:
     print('Рюкзак собрать не удастся')
 
+# 10.12.20
+# Вам доступна программа, которая выводит все обозначения полей шахматной доски в алфавитном порядке через пробел.
+
+# Перепишите данную программу с использованием функции product(), чтобы она выполняла ту же задачу.
+
+
+# from string import ascii_lowercase
+# from itertools import product
+
+# letters = ascii_lowercase[:8]
+# digits = [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+# #for letter in letters:
+# #    for digit in digits:
+# #        print(letter, digit, sep='', end=' ')
+
+# board = (f'{i[0]}{i[1]}' for i in product(letters, digits))
+# print(*list(board))
+
+
+# ### examples
+# for card in product(letters, digits):
+#     print(*card, sep='', end=' ')
+
+# ###
+# print(*(f"{letter}{digit}" for letter, digit in product(letters, digits)), sep=' ')
 
 
 
