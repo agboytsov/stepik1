@@ -945,10 +945,33 @@ else:
 # ###
 # print(*(f"{letter}{digit}" for letter, digit in product(letters, digits)), sep=' ')
 
+# 10.12.21
+# Функция password_gen()
+# Вам доступна функция password_gen(), которая возвращает генератор, порождающий все трехсимвольные строковые пароли в порядке возрастания, составленные из цифр от 
+# 0 до 9 включительно.
+# Перепишите данную функцию с использованием функции product(), чтобы она выполняла ту же задачу.
+
+#task
+def password_gen():
+    for i in range(10):
+        for j in range(10):
+            for k in range(10):
+                yield str(i) + str(j) + str(k)
+
+# solution
+from itertools import product                
+def password_gen():
+    yield from (f'{i[0]}{i[1]}{i[2]}' for i in product(range(10), repeat=3))
 
 
-
-
+### examples
+def password_gen():
+    for i, j, k in product(range(10), repeat=3):
+        yield f'{i}{j}{k}'
+ ###
+def password_gen():
+    for i in product(range(10),repeat = 3):
+        yield ''.join(map(str,i))
 
 
 
