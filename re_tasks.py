@@ -574,38 +574,76 @@ print(len(result))
 # <тег>: <атрибут>, <атрибут>, ...
 # Теги, а также атрибуты тегов, должны быть расположены в лексикографическом порядке.
 
-
-####### TODO - не проходит 2 тест
-import re
+# import re
 
 
-def tag_parse(line):
-    all_dict = {}
-    start = re.search(r'<(\w+).*?>',line)
-    while start:
-        ftag = re.match(r'<(\w+)',start.group()).group(1)
-        end = re.search(rf'</{ftag}>', line)
-        tag_attrs = re.findall(r' (\w+)=', line[start.span()[0]:start.span()[1]])
-        line = line[start.span()[1]:end.span()[0]]
-        #print(next_line)
-        if all_dict.get(ftag):
-            all_dict[ftag] += tag_attrs
-        else:
-            all_dict[ftag] = tag_attrs
-        start = re.search(r'<(\w+).*?>',line)
-        if not start:
-            break
+# def tag_parse(line):
+#     all_dict = {}
+   
+#     start = re.search(r'<(\w+).*?>',line)
+        
+#     while start:
+#         tag = re.match(r'.?<(\w+)',start.group()).group(1)
+#         end = re.search(rf'</{tag}>', line)
+#         tag_attrs = re.findall(r' (\S+)=', line[start.span()[0]:start.span()[1]])
+#         line = line[start.span()[1]:]
 
-    return all_dict
+#         if all_dict.get(tag):
+#             all_dict[tag] += tag_attrs
+#         else:
+#             all_dict[tag] = tag_attrs
+            
+#         start = re.search(r'<(\w+).*?>',line, re.M)
+        
+#         if not start:
+            
+#             break
 
-result = {}
-for line in open(0):
-    temp = tag_parse(line)
-    for tag in temp:
-        if result.get(tag):
-            result[tag] += temp[tag]
-        else:
-            result[tag] = temp[tag]
-for res in sorted(result):
-    tag_attrs = ', '.join(sorted(set(result[res])))
-    print(f'{res}: {tag_attrs}')
+#     return all_dict
+
+# result = {}
+
+# string = [i.strip() for i in open(0)]
+# string = "".join(string)
+
+# result = tag_parse(string)
+
+# for res in sorted(result):
+#     tag_attrs = ', '.join(sorted(set(result[res])))
+#     print(f'{res}: {tag_attrs}')
+
+### examples
+# import re
+
+# res = {}
+# for line in open(0):
+#     for tag, params in re.findall(r'<(\w+)(.*?)>', line):
+#         res.setdefault(tag, set()).update(re.findall(r'([\w-]+)=', params))
+
+# for key in sorted(res):
+#     print(f'{key}: {", ".join(sorted(res[key]))}')
+
+###
+
+# import sys
+# from bs4 import BeautifulSoup
+
+# soup = BeautifulSoup(sys.stdin.read(), 'html.parser')
+# dct = {i.name: i.attrs.keys() for i in soup.find_all(True)}
+
+# for k, v in sorted(dct.items()):
+#     print(f'{k}: {", ".join(sorted(v))}')
+
+
+###
+# import re
+
+# data = re.findall(r'<(\w+)(.*?)>', open(0).read())
+# d = {}
+
+# for teg, items in data:
+#     items = re.findall(r' (.+?)=".*?"', items) or ['']
+#     [d.setdefault(teg, set()).add(item) for item in items]
+    
+# for k in sorted(d):
+#     print(f'{k}: {", ".join(sorted(filter(None, d[k])))}')
