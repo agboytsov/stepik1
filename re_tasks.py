@@ -647,3 +647,21 @@ print(len(result))
     
 # for k in sorted(d):
 #     print(f'{k}: {", ".join(sorted(filter(None, d[k])))}')
+
+
+# 11.8.9
+# Функция normalize_jpeg()
+# Реализуйте функцию normalize_jpeg(), которая принимает один аргумент:
+
+# filename — название файла, имеющее расширение jpeg или jpg, которое может быть записано буквами произвольного регистра
+# Функция должна возвращать новое название файла с нормализованным расширением — jpg.
+
+# import re
+
+# def normalize_jpeg(filename):
+#     result = re.sub(r'(.*)\.jpe?g',r'\1.jpg',filename, flags=re.I)
+#     return result
+
+
+
+
