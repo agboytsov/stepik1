@@ -811,6 +811,40 @@ def multiple_split(string, delimiters):
     delimiters = [re.escape(i) for i in delimiters]
     result = re.split(rf'{"|".join(delimiters)}', string)
     return result
+
+
+# 11.9.19
+# Сумма чисел
+# Напишите программу, которая складывает все натуральные числа в строке, находящиеся в указанном диапазоне индексов.
+
+# Формат входных данных
+# На вход программе сначала подаются два целых числа 
+# �
+# a и 
+# �
+# b, больших или равных 
+# 0
+# 0, разделенные пробелом, а затем — строка.
+
+# Формат выходных данных
+# Программа должна вывести сумму всех натуральных чисел в введенной строке, находящихся в диапазоне индексов от 
+# �
+# a (включительно) до 
+# �
+# b (не включительно). Если в указанном диапазоне нет ни одного числа, программа должна вывести 
+# 0
+# 0.
+
+# put your python code her
+a, b = (int(i) for i in input().split())
+import re
+
+regex_obj = re.compile(r'\d+')
+
+string = input()
+result = sum((int(i) for i in regex_obj.findall(string, pos=a,endpos=b)))
+print(result)
+
     
 
 
