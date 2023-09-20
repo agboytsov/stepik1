@@ -805,6 +805,12 @@ print(*result, sep=', ')
 # Примечание 1. Другими словами, функция multiple_split() должна работать аналогично строковому методу split(), за тем исключением, что delimiters может содержать не единственный разделитель, а целый набор разделителей.
 
 
+import re
 
+def multiple_split(string, delimiters):
+    delimiters = [re.escape(i) for i in delimiters]
+    result = re.split(rf'{"|".join(delimiters)}', string)
+    return result
+    
 
 
