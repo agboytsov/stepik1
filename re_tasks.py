@@ -768,7 +768,76 @@ print(sub(r'\b(\w)(\w)', r'\2\1', input()))
 # Примечание 4. Максимальная длина результирующей строки не превосходит 
 # 450000 символов.
 
+# put your python code here
+import re
 
+def expand_multiplications(text):
+    pattern = r'(\d+)\(([^()]+)\)'  
+
+    def replace(match):
+        count = int(match.group(1)) 
+        string = match.group(2)  
+        return expand_multiplications(string) * count
+
+    while True:
+        expanded_text, num_replacements = re.subn(pattern, replace, text)  
+        if num_replacements == 0:
+            break 
+        text = expanded_text
+
+    return text
+
+                            
+        
+
+    
+print(expand_multiplications(input()))
+
+
+### examples
+
+from re import subn
+
+s, n = input(), 1
+
+while n:
+    s, n = subn(r'(\d+)\((\w*)\)', lambda m: m[2] * int(m[1]), s)
+
+print(s)
+
+
+###
+
+
+import re
+
+
+def mult_string(match):
+    n, string = match.group(1, 2)
+    return string * int(n)
+
+
+def unpuck_string(string):
+    res = re.sub(r'(\d+)\((\w+?)\)', mult_string, string)
+    if string == res:
+        return res
+    else:
+        return unpuck_string(res)
+
+
+print(unpuck_string(input()))
+
+
+###
+
+import re
+
+s = input()
+
+while '(' in s:
+    s = re.sub(r'(\d+)\((\w+)\)', lambda match_onj: int(match_onj[1]) * match_onj[2], s)
+
+print(s)
 
 
 
